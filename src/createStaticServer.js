@@ -16,7 +16,7 @@ const createStaticServer = (port) => {
       reqPath = '/index.html'
     }
 
-    const filePath = path.join(__dirname, '../../../dist', reqPath)
+    const filePath = path.join(__dirname, '../../../../dist', reqPath)
 
     const extname = String(path.extname(filePath)).toLowerCase()
     const mimeTypes = {

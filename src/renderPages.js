@@ -47,7 +47,7 @@ const renderPages = async (allPages, port = 54321) => {
 
     // Convert URI path to absolute disk path in the output dir
     const pageFilePath = pagePath === '/' ? '/index.html' : `${pagePath}/index.html`
-    const pageFileAbsolutePath = path.join(__dirname, '../../../dist', pageFilePath)
+    const pageFileAbsolutePath = path.join(__dirname, '../../../../dist', pageFilePath)
 
     // Remove basepath from rendered HTML
     // Ex: <script src="http://localhost/about" /> becomes just <script src="/about" />
@@ -81,7 +81,7 @@ const renderPages = async (allPages, port = 54321) => {
     newFetchUrls.push(filePath)
 
     try {
-      const dataAbsolutePath = path.join(__dirname, '../../../dist', filePath)
+      const dataAbsolutePath = path.join(__dirname, '../../../../dist', filePath)
       await fse.outputFile(dataAbsolutePath, JSON.stringify(data))
       console.log(`Data saved: ${dataAbsolutePath}`)
     } catch (err) {
@@ -92,7 +92,7 @@ const renderPages = async (allPages, port = 54321) => {
   console.log('Updating bundles...')
   try {
     const results = await replace({
-      files: path.join(__dirname, '../../../dist/*.{js,jsx}'),
+      files: path.join(__dirname, '../../../../dist/*.{js,jsx}'),
       from: fetchUrls,
       to: newFetchUrls,
       countMatches: true
