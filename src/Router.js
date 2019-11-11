@@ -4,11 +4,7 @@ import { h } from "hyperapp";
 import { htmlToVdom } from "./htmlToVdom";
 
 // Router component
-export async function Router(
-  state,
-  fallback = "Loading ...",
-  notFound = "404"
-) {
+export function Router(state, fallback = "Loading ...", notFound = "404") {
   // State pre-fetching testing
   // if (window.navigator.userAgent === 'puppeteer') {
 
