@@ -1,8 +1,8 @@
 {
-  "version": "0.2.7",
-  "name": "hyperstatic",
+  "version": "0.2.8",
+  "name": "@martel/hyperstatic",
   "description": "Hyperapp static site framework",
-  "author": "Alexandre Lotte",
+  "author": "Brandon Martel",
   "license": "MIT",
   "main": "src/index.js",
   "module": "src/index.js",
@@ -32,7 +32,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/loteoo/hyperstatic.git"
+    "url": "git+https://github.com/bmartel/hyperstatic.git"
   },
   "keywords": [
     "hyperapp",
@@ -40,7 +40,7 @@
     "static-site-generator"
   ],
   "bugs": {
-    "url": "https://github.com/loteoo/hyperstatic/issues"
+    "url": "https://github.com/bmartel/hyperstatic/issues"
   },
-  "homepage": "https://github.com/loteoo/hyperstatic#readme"
+  "homepage": "https://github.com/bmartel/hyperstatic#readme"
 }

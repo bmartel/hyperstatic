@@ -1,10 +1,14 @@
-import { h } from 'hyperapp'
+import { h } from "hyperapp";
 
 // import serialize from 'serialize-javascript'
-import { htmlToVdom } from './htmlToVdom'
+import { htmlToVdom } from "./htmlToVdom";
 
 // Router component
-export const Router = state => {
+export async function Router(
+  state,
+  fallback = "Loading ...",
+  notFound = "404"
+) {
   // State pre-fetching testing
   // if (window.navigator.userAgent === 'puppeteer') {
 
@@ -21,36 +25,39 @@ export const Router = state => {
   //   `
   // }
 
-  const matchedRoute = state.routes[state.location.route]
+  const matchedRoute = state.routes[state.location.route];
 
-  if (!matchedRoute) {
-    return '404'
+  let { component, guard } = matchedRoute;
+
+  if (!component) {
+    component = matchedRoute;
   }
 
-  const pageData = state.pageData[state.location.path]
+  // Render a notFound component when route is unmatched or failed guard condition
+  if (!component || (guard && !guard(state))) {
+    return notFound;
+  }
 
-  if (matchedRoute.view) {
-    if (!matchedRoute.initAction) {
-      return h('div', { id: 'router-outlet' }, [
-        matchedRoute.view(state)
-      ])
+  const pageData = state.pageData[state.location.path];
+
+  if (component.view) {
+    if (!component.initAction) {
+      return h("div", { id: "router-outlet" }, [component.view(state)]);
     } else {
       if (pageData && pageData.initiated) {
-        return h('div', { id: 'router-outlet' }, [
-          matchedRoute.view(state)
-        ])
+        return h("div", { id: "router-outlet" }, [component.view(state)]);
       }
     }
   }
 
-  const previousOutlet = document.getElementById('router-outlet')
+  const previousOutlet = document.getElementById("router-outlet");
   if (previousOutlet) {
     // console.log('Keeping existing HTML while view loads...')
-    return h('div', { id: 'router-outlet' }, [
+    return h("div", { id: "router-outlet" }, [
       htmlToVdom(previousOutlet.innerHTML)
-    ])
+    ]);
   }
 
-  // console.log('Loading view...')
-  return 'Loading...'
+  // Render a loading or intermediary fallback
+  return fallback;
 }
