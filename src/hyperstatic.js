@@ -18,22 +18,14 @@ export const hyperstatic = ({
   const init = {
     goodConnection,
     routes: buildRoutesObject(routes),
-    pageData: {}
+    pageData: {},
+    ...userInit
   };
 
   // Initialize hyperapp
   app({
     // Merge user init with hyperstatic init
-    init:
-      typeof userInit === "function"
-        ? [
-            ParseUrl(init, window.location.pathname + window.location.search),
-            userInit
-          ]
-        : ParseUrl(
-            { ...init, ...userInit },
-            window.location.pathname + window.location.search
-          ),
+    init: ParseUrl(init, window.location.pathname + window.location.search),
 
     // Use view as-is
     view,
