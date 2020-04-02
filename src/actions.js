@@ -1,24 +1,24 @@
-import { LoadBundle, ChangeLocation } from './effects'
+import { LoadBundle, UpdateHistory } from "./effects";
 
-import { getPathInfo } from './utils'
+import { getPathInfo } from "./utils";
 
 export const ParseUrl = (state, path) => {
   // Set location params
-  const pathInfo = getPathInfo(state, path)
+  const pathInfo = getPathInfo(state, path);
   const next = {
     ...state,
     location: pathInfo
-  }
+  };
 
   // If route exists and isn't loaded, load it
-  return (pathInfo.route && !pathInfo.loaded)
+  return pathInfo.route && !pathInfo.loaded
     ? TriggerPageLoad(next, pathInfo.path)
-    : next
-}
+    : next;
+};
 
 const BundleLoaded = (state, { path, bundle }) => {
-  const routes = Object.keys(state.routes).map(route => state.routes[route])
-  const matchedRoute = routes.find(route => route.pattern.match(path))
+  const routes = Object.keys(state.routes).map(route => state.routes[route]);
+  const matchedRoute = routes.find(route => route.pattern.match(path));
 
   const withBundleLoaded = {
     ...state,
@@ -31,7 +31,7 @@ const BundleLoaded = (state, { path, bundle }) => {
         loading: false
       }
     }
-  }
+  };
 
   if (bundle.Init) {
     const markedAsInitiated = {
@@ -43,36 +43,33 @@ const BundleLoaded = (state, { path, bundle }) => {
           initiated: true
         }
       }
-    }
+    };
 
-    return bundle.Init(
-      markedAsInitiated,
-      getPathInfo(withBundleLoaded, path)
-    )
+    return bundle.Init(markedAsInitiated, getPathInfo(withBundleLoaded, path));
   }
 
-  return withBundleLoaded
-}
+  return withBundleLoaded;
+};
 
 // Navigate action
-export const Navigate = (state, to) => [
-  state,
-  ChangeLocation({ to })
-]
+export const Navigate = (state, to) =>
+  window.location.pathname === to
+    ? state
+    : [ParseUrl(state, to), UpdateHistory({ to })];
 
 export const TriggerPageLoadIfGoodConnection = (state, path) => {
   if (state.goodConnection) {
-    return TriggerPageLoad(state, path)
+    return TriggerPageLoad(state, path);
   }
 
-  return state
-}
+  return state;
+};
 
 export const TriggerPageLoad = (state, path) => {
-  const routes = Object.keys(state.routes).map(route => state.routes[route])
-  const matchedRoute = routes.find(route => route.pattern.match(path))
+  const routes = Object.keys(state.routes).map(route => state.routes[route]);
+  const matchedRoute = routes.find(route => route.pattern.match(path));
 
-  const pageData = state.pageData[path]
+  const pageData = state.pageData[path];
 
   if (matchedRoute && !matchedRoute.view && !matchedRoute.loading) {
     return [
@@ -91,10 +88,15 @@ export const TriggerPageLoad = (state, path) => {
         action: BundleLoaded,
         bundlePromise: matchedRoute.bundlePromise
       })
-    ]
+    ];
   }
 
-  if (matchedRoute && matchedRoute.view && !pageData && matchedRoute.initAction) {
+  if (
+    matchedRoute &&
+    matchedRoute.view &&
+    !pageData &&
+    matchedRoute.initAction
+  ) {
     return matchedRoute.initAction({
       ...state,
       pageData: {
@@ -104,8 +106,8 @@ export const TriggerPageLoad = (state, path) => {
           initiated: true
         }
       }
-    })
+    });
   }
 
-  return state
-}
+  return state;
+};

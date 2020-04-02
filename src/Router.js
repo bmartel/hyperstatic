@@ -1,26 +1,9 @@
 import { h } from "hyperapp";
 
-// import serialize from 'serialize-javascript'
 import { htmlToVdom } from "./htmlToVdom";
 
 // Router component
 export function Router(state, fallback = "Loading ...", notFound = "404") {
-  // State pre-fetching testing
-  // if (window.navigator.userAgent === 'puppeteer') {
-
-  //   let scriptTag = document.getElementById('initial-state')
-
-  //   if (!scriptTag) {
-  //     scriptTag = document.createElement('script')
-  //     document.body.appendChild(scriptTag)
-  //   }
-
-  //   scriptTag.id = 'initial-state'
-  //   scriptTag.text = `
-  //     window.initialState = ${serialize(state)}
-  //   `
-  // }
-
   const matchedRoute = state.routes[state.location.route];
 
   let { component, guard } = matchedRoute;
@@ -48,7 +31,6 @@ export function Router(state, fallback = "Loading ...", notFound = "404") {
 
   const previousOutlet = document.getElementById("router-outlet");
   if (previousOutlet) {
-    // console.log('Keeping existing HTML while view loads...')
     return h("div", { id: "router-outlet" }, [
       htmlToVdom(previousOutlet.innerHTML)
     ]);
