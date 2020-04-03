@@ -30,7 +30,7 @@ export const elementPosition = (el, offset) => {
 };
 
 export const scrollView = ({hash, offset, position }) => {
-  if (isString(hash)) {
+  if (hash && isString(hash)) {
     const el = document.querySelector(hash);
     if (el) {
       offset =
