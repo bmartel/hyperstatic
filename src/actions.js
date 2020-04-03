@@ -52,10 +52,13 @@ const BundleLoaded = (state, { path, bundle }) => {
 };
 
 // Navigate action
-export const Navigate = (state, to) =>
-  window.location.pathname === to
-    ? state
-    : [ParseUrl(state, to), UpdateHistory({ to })];
+export const Navigate = (state, to) => {
+  if(window.location.pathname === to) {
+    return state;
+  }
+  const next = ParseUrl(state, to);
+  return [next, UpdateHistory({ to, location: next.location })];
+}
 
 export const TriggerPageLoadIfGoodConnection = (state, path) => {
   if (state.goodConnection) {
