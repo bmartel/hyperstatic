@@ -39,6 +39,7 @@ export const scrollView = ({hash, offset, position }) => {
           : {};
       offset = normalizeOffset(offset);
       position = elementPosition(el, offset);
+    }
   } else if (isPosition(position)) {
     position = normalizePosition(position);
   }
