@@ -1,5 +1,5 @@
 {
-  "version": "0.2.23",
+  "version": "0.2.24",
   "name": "@martel/hyperstatic",
   "description": "Hyperapp static site framework",
   "author": "Brandon Martel",
