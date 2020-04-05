@@ -22,20 +22,17 @@ export const hyperstatic = ({
     pageData: {},
   };
 
+  const url = window.location.pathname + window.location.search;
   // Merge user init with hyperstatic init
   if (Array.isArray(userInit)) {
-    init = [
-      ParseUrl(
-        { ...init, ...userInit[0] },
-        window.location.pathname + window.location.search
-      ),
-      userInit[1],
-    ];
+    const next = ParseUrl(init, url);
+    if (Array.isArray(next)) {
+      init = [{ ...next[0], ...userInit[0] }, [next[1], userInit[1]]];
+    } else {
+      init = [next, userInit];
+    }
   } else {
-    init = ParseUrl(
-      { ...init, ...userInit },
-      window.location.pathname + window.location.search
-    );
+    init = ParseUrl({ ...init, ...userInit }, url);
   }
 
   const appConfig = {
