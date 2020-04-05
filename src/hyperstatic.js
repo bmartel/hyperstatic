@@ -57,17 +57,18 @@ export const hyperstatic = ({
     node,
   };
 
-  // logging middleware
+  // Initialize hyperapp
   if (process.env.NODE_ENV !== "production") {
+    // logging middleware
     import("hypermiddleware").then(({ middleware, loggerMiddleware }) => {
       appConfig.middleware = middleware(
         [loggerMiddleware, appConfig.middleware].filter(Boolean)
       );
+      app(appConfig);
     });
+  } else {
+    app(appConfig);
   }
-
-  // Initialize hyperapp
-  app(appConfig);
 
   // I added this because there is no oncreate event when re-hydrating existing html (which is the expected behavior)
   setTimeout(() => {
