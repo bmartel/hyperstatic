@@ -12,7 +12,7 @@
   "dependencies": {
     "fs-extra": "^8.1.0",
     "hyperapp": "^2.0.3",
-    "hyperapp-redux-devtools": "^1.1.6",
+    "hypermiddleware": "^1.0.1",
     "puppeteer": "^1.18.1",
     "replace-in-file": "^4.1.1",
     "serialize-javascript": "^1.7.0",

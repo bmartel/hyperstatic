@@ -9,6 +9,7 @@ export const hyperstatic = ({
   view,
   subscriptions: userSubs,
   node,
+  middleware: userMiddleware,
 }) => {
   // TODO: use something more reliable
   const connSpeed = navigator.connection ? navigator.connection.downlink : 10;
@@ -21,6 +22,7 @@ export const hyperstatic = ({
     pageData: {},
   };
 
+  // Merge user init with hyperstatic init
   if (Array.isArray(userInit)) {
     init = [
       ParseUrl(
@@ -37,7 +39,6 @@ export const hyperstatic = ({
   }
 
   const appConfig = {
-    // Merge user init with hyperstatic init
     init,
 
     // Use view as-is
@@ -49,19 +50,25 @@ export const hyperstatic = ({
 
       return subs.concat([PopState({ action: ParseUrl })]);
     },
+
+    // Define user middleware
+    middleware: userMiddleware,
+
     node,
   };
 
-  // Initialize hyperapp
+  // logging middleware
   if (process.env.NODE_ENV !== "production") {
-    import("hyperapp-redux-devtools").then((devtools) => {
-      devtools(app)(appConfig);
+    import("hypermiddleware").then(({ middleware, loggerMiddleware }) => {
+      appConfig.middleware = middleware(
+        [loggerMiddleware, appConfig.middleware].filter(Boolean)
+      );
     });
-  } else {
-    app(appConfig);
   }
 
-  // TODO: find something better than this... (Init effect, find a nice way to merge with user's tuple)
+  // Initialize hyperapp
+  app(appConfig);
+
   // I added this because there is no oncreate event when re-hydrating existing html (which is the expected behavior)
   setTimeout(() => {
     document.querySelectorAll("a").forEach((link) => {
