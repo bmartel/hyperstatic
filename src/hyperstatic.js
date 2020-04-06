@@ -61,9 +61,9 @@ export const hyperstatic = ({
   if (process.env.NODE_ENV !== "production") {
     // logging middleware
     import("hypermiddleware").then(({ middleware, loggerMiddleware }) => {
-      // appConfig.middleware = middleware(
-      //   [loggerMiddleware, appConfig.middleware].filter(Boolean)
-      // );
+      appConfig.middleware = middleware(
+        [loggerMiddleware, appConfig.middleware].filter(Boolean)
+      );
       app(appConfig);
     });
   } else {
