@@ -1,4 +1,4 @@
-import { h } from 'hyperapp'
+import { h } from "hyperapp";
 
 /**
  * Simple helper to add lifecycle events to v2
@@ -8,18 +8,19 @@ import { h } from 'hyperapp'
  */
 
 export const Lifecycle = (elementName, props, children) => {
-  const fn = (method, eventName) => function (el) {
-    const event = new CustomEvent(eventName, { detail: el })
-    setTimeout(() => el.parentElement.dispatchEvent(event))
-    return Object.getPrototypeOf(this)[method].call(this, el)
-  }
+  const fn = (method, eventName) =>
+    function (el) {
+      const event = new CustomEvent(eventName, { detail: el });
+      setTimeout(() => el.parentElement.dispatchEvent(event));
+      return Object.getPrototypeOf(this)[method].call(this, el);
+    };
   return h(
     elementName,
     {
-      appendChild: fn('appendChild', 'create'),
-      removeChild: fn('removeChild', 'remove'),
-      ...props
+      appendChild: fn("appendChild", "create"),
+      removeChild: fn("removeChild", "remove"),
+      ...props,
     },
     children
-  )
-}
+  );
+};

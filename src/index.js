@@ -1,8 +1,10 @@
 export { hyperstatic } from "./hyperstatic";
 export { Navigate } from "./actions";
-export { Redirect } from "./Redirect";
+export { Redirect } from "./effects";
 export { Link } from "./Link";
+export { Lifecycle } from "./Lifecycle";
 export { Router } from "./Router";
 export { NoPrerender } from "./NoPrerender";
 export { StaticFetch } from "./StaticFetch";
 export { StaticQuery } from "./StaticQuery";
+export { redirectTo } from "./utils";

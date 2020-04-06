@@ -6,17 +6,20 @@
 
 const fetchFx = (dispatch, { url, action, error }) => {
   fetch(url)
-    .then(response => response.json())
-    .then(data => {
-      if (window.navigator.userAgent === 'puppeteer') {
+    .then((response) => response.json())
+    .then((data) => {
+      if (window.navigator.userAgent === "puppeteer") {
         window.staticData = {
           ...window.staticData,
-          [url]: data
-        }
+          [url]: data,
+        };
       }
-      dispatch(action, data)
+      dispatch(action, data);
     })
-    .catch(err => dispatch(error, err))
-}
+    .catch((err) => dispatch(error, err));
+};
 
-export const StaticFetch = ({ url, action, error }) => [fetchFx, { url, action, error }]
+export const StaticFetch = ({ url, action, error }) => [
+  fetchFx,
+  { url, action, error },
+];

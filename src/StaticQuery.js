@@ -6,20 +6,23 @@
 
 const graphQLEffect = (dispatch, { url, query, action, error }) => {
   fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query })
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query }),
   })
-    .then(data => {
-      if (window.navigator.userAgent === 'puppeteer') {
+    .then((data) => {
+      if (window.navigator.userAgent === "puppeteer") {
         window.staticData = {
           ...window.staticData,
-          [query]: data
-        }
+          [query]: data,
+        };
       }
-      dispatch(action, data)
+      dispatch(action, data);
     })
-    .catch(err => dispatch(error, err))
-}
+    .catch((err) => dispatch(error, err));
+};
 
-export const StaticQuery = ({ url, query, action, error }) => [graphQLEffect, { url, query, action, error }]
+export const StaticQuery = ({ url, query, action, error }) => [
+  graphQLEffect,
+  { url, query, action, error },
+];

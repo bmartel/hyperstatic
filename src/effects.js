@@ -1,28 +1,27 @@
-import { scrollView } from "./utils";
+import { redirectTo } from "./utils";
 
 // Load bundle FX
 const loadBundleFx = (dispatch, { action, bundlePromise, path }) =>
-  bundlePromise.then(importedModule => {
+  bundlePromise.then((importedModule) => {
     dispatch(action, {
       path,
-      bundle: importedModule
+      bundle: importedModule,
     });
   });
 
 export const LoadBundle = ({ action, bundlePromise, path }) => [
   loadBundleFx,
-  { action, bundlePromise, path }
+  { action, bundlePromise, path },
 ];
 
-const historyFx = (_dispatch, { to, location }) => {
+export const historyFx = (_dispatch, { to }) => {
   history.pushState(null, "", to);
-
-  if (location) {
-    scrollView(location);
-  }
 };
 
-export const UpdateHistory = ({ to, location }) => [
-  historyFx,
-  { to, location }
-];
+export const UpdateHistory = ({ to }) => [historyFx, { to }];
+
+const redirectFx = (_dispatch, { to }) => {
+  redirectTo(to);
+};
+
+export const Redirect = ({ to }) => [redirectFx, { to }];

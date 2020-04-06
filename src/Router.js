@@ -1,6 +1,7 @@
 import { h } from "hyperapp";
-
 import { htmlToVdom } from "./htmlToVdom";
+
+const RouterOutlet = (children) => h("div", { id: "router-outlet" }, children);
 
 // Router component
 export function Router(
@@ -9,6 +10,10 @@ export function Router(
   notFound = "Page Not Found"
 ) {
   try {
+    if (state.redirect) {
+      return RouterOutlet([fallback]);
+    }
+
     const matchedRoute = state.routes[state.location.route];
 
     let { component, guard } = matchedRoute;
@@ -19,30 +24,26 @@ export function Router(
 
     // Render a notFound component when route is unmatched or failed guard condition
     if (!component || (guard && !guard(state))) {
-      return notFound;
+      return RouterOutlet([notFound]);
     }
 
     const pageData = state.pageData[state.location.path];
 
-    if (component.view) {
-      if (!component.initAction) {
-        return h("div", { id: "router-outlet" }, [component.view(state)]);
-      } else {
-        if (pageData && pageData.initiated) {
-          return h("div", { id: "router-outlet" }, [component.view(state)]);
-        }
-      }
+    if (
+      (component.view && !component.initAction) ||
+      (pageData && pageData.initiated)
+    ) {
+      return RouterOutlet([component.view(state)]);
     }
 
     const previousOutlet = document.getElementById("router-outlet");
     if (previousOutlet) {
-      return h("div", { id: "router-outlet" }, [
-        htmlToVdom(previousOutlet.innerHTML),
-      ]);
+      return RouterOutlet([htmlToVdom(previousOutlet.innerHTML)]);
     }
+
     // Render a loading or intermediary fallback
-    return fallback;
+    return RouterOutlet([fallback]);
   } catch (err) {
-    return notFound;
+    return RouterOutlet([notFound]);
   }
 }

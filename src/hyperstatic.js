@@ -1,6 +1,6 @@
 import { app } from "hyperapp";
-import { PopState } from "./subscriptions";
-import { ParseUrl } from "./actions";
+import { PopState, Redirect } from "./subscriptions";
+import { ParseUrl, Navigate } from "./actions";
 import { buildRoutesObject } from "./buildRoutesObject";
 
 export const hyperstatic = ({
@@ -20,6 +20,7 @@ export const hyperstatic = ({
     goodConnection,
     routes: buildRoutesObject(routes),
     pageData: {},
+    redirect: null,
   };
 
   const url = window.location.pathname + window.location.search;
@@ -43,9 +44,11 @@ export const hyperstatic = ({
 
     // Add a subscription to the sub array
     subscriptions: (state) => {
-      const subs = userSubs ? userSubs(state) : [];
-
-      return subs.concat([PopState({ action: ParseUrl })]);
+      return [
+        PopState({ action: ParseUrl }),
+        Redirect({ action: Navigate }),
+        ...(userSubs ? userSubs(state) : []),
+      ];
     },
 
     // Define user middleware
@@ -58,9 +61,9 @@ export const hyperstatic = ({
   if (process.env.NODE_ENV !== "production") {
     // logging middleware
     import("hypermiddleware").then(({ middleware, loggerMiddleware }) => {
-      appConfig.middleware = middleware(
-        [loggerMiddleware, appConfig.middleware].filter(Boolean)
-      );
+      // appConfig.middleware = middleware(
+      //   [loggerMiddleware, appConfig.middleware].filter(Boolean)
+      // );
       app(appConfig);
     });
   } else {
