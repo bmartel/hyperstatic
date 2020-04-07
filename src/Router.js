@@ -6,7 +6,7 @@ const id = "router-outlet";
 const RouterOutlet = (children) => h("div", { id }, children);
 
 // the previous router outlet that rendered or a fallback
-const previousOutlet = (fallback, skipPrevious = false) => {
+const previousOutlet = (fallback, notFound, skipPrevious = false) => {
   if (skipPrevious) {
     return RouterOutlet([notFound]);
   }
@@ -14,7 +14,7 @@ const previousOutlet = (fallback, skipPrevious = false) => {
   if (outlet) {
     return RouterOutlet([htmlToVdom(outlet.innerHTML)]);
   }
-  return RouterOutlet([notFound]);
+  return RouterOutlet([fallback]);
 };
 
 // Router component
@@ -32,12 +32,15 @@ export function Router(
       component = matchedRoute;
     }
 
+    console.log(component);
     let next = null;
     // Render a notFound component when route is unmatched or failed guard condition
     // if next is false render the previousOutlet, if true render the fallback
     // otherwise use the return of next as fallback
     if (!component || (guard && (next = guard(state)) !== undefined)) {
-      return typeof next !== "boolean" ? next : previousOutlet(notFound, next);
+      return typeof next !== "boolean"
+        ? next
+        : previousOutlet(fallback, notFound, next);
     }
 
     const pageData = state.pageData[state.location.path];
@@ -51,7 +54,7 @@ export function Router(
     }
 
     // Render a loading or intermediary fallback or previousOutlet
-    return previousOutlet(notFound);
+    return previousOutlet(fallback, notFound);
   } catch (err) {
     return RouterOutlet([notFound]);
   }
