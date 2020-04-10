@@ -32,7 +32,6 @@ export function Router(
       component = matchedRoute;
     }
 
-    console.log(component);
     let next = null;
     // Render a notFound component when route is unmatched or failed guard condition
     // if next is false render the previousOutlet, if true render the fallback
