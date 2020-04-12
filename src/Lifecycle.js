@@ -11,7 +11,7 @@ export const Lifecycle = (elementName, props, children) => {
   const fn = (method, eventName) =>
     function (el) {
       const event = new CustomEvent(eventName, { detail: el });
-      setTimeout(() => el.parentElement.dispatchEvent(event));
+      setTimeout(() => el.dispatchEvent(event));
       return Object.getPrototypeOf(this)[method].call(this, el);
     };
   return h(
