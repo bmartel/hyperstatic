@@ -3,7 +3,7 @@ import { htmlToVdom } from "./htmlToVdom";
 
 const id = "router-outlet";
 
-const RouterOutlet = (children) => h("div", { id }, children);
+const RouterOutlet = children => h("div", { id }, children);
 
 // the previous router outlet that rendered or a fallback
 const previousOutlet = (fallback, notFound, skipPrevious = false) => {

@@ -1,10 +1,10 @@
 import UrlPattern from "url-pattern";
 
 // Build routes object
-export const buildRoutesObject = (routes) =>
+export const buildRoutesObject = routes =>
   Object.keys(routes).reduce(
     (routesObj, route) => {
-      let { component: bundlePromise, guard } = routes[route];
+      let { component: bundlePromise, guard, name } = routes[route];
       if (!bundlePromise) {
         bundlePromise = routes[route];
       }
@@ -15,8 +15,9 @@ export const buildRoutesObject = (routes) =>
           route,
           bundlePromise,
           guard,
-          pattern: new UrlPattern(route),
-        },
+          name,
+          pattern: new UrlPattern(route)
+        }
       };
     },
     window.initialState ? window.initialState.routes : {}
