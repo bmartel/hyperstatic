@@ -1,7 +1,7 @@
-export const isNumber = v => typeof v === "number";
-export const isString = v => typeof v === "string";
-export const isObject = v => typeof v === "object";
-export const isPosition = pos => isNumber(pos.x) || isNumber(pos.y);
+export const isNumber = (v) => typeof v === "number";
+export const isString = (v) => typeof v === "string";
+export const isObject = (v) => typeof v === "object";
+export const isPosition = (pos) => isNumber(pos.x) || isNumber(pos.y);
 
 export const assign = (a, b) => {
   const out = {};
@@ -10,21 +10,21 @@ export const assign = (a, b) => {
   return out;
 };
 
-export const normalizeOffset = offset => ({
+export const normalizeOffset = (offset) => ({
   x: isNumber(offset.x) ? offset.x : 0,
-  y: isNumber(offset.y) ? offset.y : 0
+  y: isNumber(offset.y) ? offset.y : 0,
 });
 
-export const normalizePosition = pos => ({
+export const normalizePosition = (pos) => ({
   x: isNumber(pos.x) ? pos.x : window.pageXOffset,
-  y: isNumber(pos.y) ? pos.y : window.pageYOffset
+  y: isNumber(pos.y) ? pos.y : window.pageYOffset,
 });
 
 export let scrollPosition = { x: 0, y: 0 };
 export const captureScrollPosition = () =>
   (scrollPosition = {
     x: window.pageXOffset,
-    y: window.pageYOffset
+    y: window.pageYOffset,
   });
 
 export const elementPosition = (el, offset) => {
@@ -33,7 +33,7 @@ export const elementPosition = (el, offset) => {
   const elRect = el.getBoundingClientRect();
   return {
     x: elRect.left - docRect.left - offset.x,
-    y: elRect.top - docRect.top - offset.y
+    y: elRect.top - docRect.top - offset.y,
   };
 };
 
@@ -62,8 +62,8 @@ export const getPathInfo = (state, path) => {
   // Ignore trailing slashes EXPEPT for home page
   const withoutTrailingSlash =
     pathname !== "/" ? pathname.replace(/\/$/, "") : pathname;
-  const routes = Object.keys(state.routes).map(route => state.routes[route]);
-  const matchedRoute = routes.find(route =>
+  const routes = Object.keys(state.routes).map((route) => state.routes[route]);
+  const matchedRoute = routes.find((route) =>
     route.pattern.match(withoutTrailingSlash)
   );
   const matchParams =
@@ -75,12 +75,12 @@ export const getPathInfo = (state, path) => {
     params: matchParams || {},
     query: search,
     queryParams: Object.fromEntries(searchParams.entries()),
-    route: matchedRoute && matchedRoute.route, // Route pattern, ex: /products/:id
-    name: matchedRoute && matchedRoute.name, // Route name, ex: products.show
+    route: matchedRoute && matchedRoute.route, // Route path pattern, ex: /products/:id
+    pattern: matchedRoute && matchedRoute.pattern, // Route regex pattern
     loaded: !!loaded,
-    hash
+    hash,
   };
 };
 
-export const redirectTo = to =>
+export const redirectTo = (to) =>
   dispatchEvent(new CustomEvent("redirect", { detail: to }));

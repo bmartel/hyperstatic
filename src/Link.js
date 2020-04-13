@@ -2,12 +2,12 @@ import { Lifecycle } from "./Lifecycle";
 import {
   Navigate,
   TriggerPageLoad,
-  TriggerPageLoadIfGoodConnection
+  TriggerPageLoadIfGoodConnection,
 } from "./actions";
 
 // Link component
 export const Link = (
-  { to, name, location, class: className, ...props },
+  { to, location, class: className, ...props },
   children
 ) => {
   return Lifecycle(
@@ -16,10 +16,10 @@ export const Link = (
       href: to,
       onclick: [
         Navigate,
-        ev => {
+        (ev) => {
           ev.preventDefault();
           return to;
-        }
+        },
       ],
       onmouseover: [TriggerPageLoad, to],
       oncreate: [TriggerPageLoadIfGoodConnection, to],
@@ -27,9 +27,9 @@ export const Link = (
       class: {
         [className]: className,
         "link-active":
-          location && name && location.name && location.name === name
+          location && location.pattern && location.pattern.match(to),
       },
-      ...props
+      ...props,
     },
     children
   );
