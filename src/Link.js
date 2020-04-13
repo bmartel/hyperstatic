@@ -7,7 +7,7 @@ import {
 
 // Link component
 export const Link = (
-  { to, location, class: className, ...props },
+  { to, location, class: className, exact = false, ...props },
   children
 ) => {
   return Lifecycle(
@@ -26,8 +26,9 @@ export const Link = (
       ontriggerpageload: [TriggerPageLoadIfGoodConnection, to],
       class: {
         [className]: className,
-        "link-active":
-          location && location.pattern && location.pattern.match(to),
+        "link-active": exact
+          ? location && location.path === to
+          : location && location.pattern && location.pattern.match(to),
       },
       ...props,
     },
